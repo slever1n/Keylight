@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumina Monitor Keylight — Professional Studio & Webcam Lighting</title>
+  <meta name="description" content="Turn your monitor into a studio-grade key light with warm, cold, and daylight Kelvin temperatures, brightness dimming, ring light mode, and webcam preview.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+  <!-- Google Fonts for sleek luxury studio typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-kelvin">
+  <!-- LIGHT EMITTING CANVAS -->
+  <div id="light-surface" class="light-surface" aria-label="Keylight Surface">
+    <!-- Ring light cutout mask for Ring Mode -->
+    <div id="ring-cutout" class="ring-cutout">
+      <div class="ring-target-crosshair">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 3v3m0 12v3M3 12h3m12 0h3"/>
+        </svg>
+        <span>Position Webcam Here</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING HUD / CONTROLS (AUTOHIDES ON INACTIVITY) -->
+  <div id="hud-container" class="hud-container">
+    <div class="hud-glass">
+      <!-- TOP STATUS / UTILITY BAR -->
+      <header class="hud-header">
+        <div class="brand">
+          <div class="brand-icon">
+            <span class="light-pip" id="brand-pip"></span>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">LUMINA</span>
+            <span class="brand-badge">KEYLIGHT</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <div class="status-pill" id="wakelock-pill" title="Screen Wake Lock keeps monitor awake">
+            <span class="status-dot active"></span>
+            <span class="status-text" id="wakelock-label">Awake</span>
+          </div>
+
+          <button id="camera-toggle-btn" class="icon-btn" title="Toggle Webcam Mirror Preview (C)" aria-label="Webcam Preview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 7l-7 5 7 5V7z"/>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+            <span class="btn-label">Mirror</span>
+          </button>
+
+          <button id="shortcuts-btn" class="icon-btn" title="Keyboard Shortcuts (?)" aria-label="Shortcuts">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M18 12h.01M8 16h8"/>
+            </svg>
+          </button>
+
+          <button id="hud-pin-btn" class="icon-btn" title="Pin HUD / Keep Controls Always Visible (H)" aria-label="Pin Controls">
+            <svg class="pin-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="17" x2="12" y2="22"/>
+              <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/>
+            </svg>
+          </button>
+
+          <button id="fullscreen-btn" class="icon-btn primary-icon-btn" title="Toggle Fullscreen (F)" aria-label="Fullscreen">
+            <svg class="fs-enter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <svg class="fs-exit-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+              <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- LIGHTING MODE SELECTOR -->
+      <nav class="mode-tabs" role="tablist">
+        <button class="mode-tab active" data-mode="kelvin" role="tab" aria-selected="true">
+          <span class="tab-indicator"></span>
+          <span class="tab-icon">🌡️</span>
+          <span class="tab-title">Key Light (Kelvin)</span>
+        </button>
+        <button class="mode-tab" data-mode="split" role="tab" aria-selected="false">
+          <span class="tab-indicator"></span>
+          <span class="tab-icon">🌗</span>
+          <span class="tab-title">Dual Split (Key + Fill)</span>
+        </button>
+        <button class="mode-tab" data-mode="ring" role="tab" aria-selected="false">
+          <span class="tab-indicator"></span>
+          <span class="tab-icon">🔘</span>
+          <span class="tab-title">Ring Light</span>
+        </button>
+        <button class="mode-tab" data-mode="rgb" role="tab" aria-selected="false">
+          <span class="tab-indicator"></span>
+          <span class="tab-icon">🌈</span>
+          <span class="tab-title">RGB Mood</span>
+        </button>
+      </nav>
+
+      <!-- TAB 1: KELVIN TEMPERATURE MODE -->
+      <section id="panel-kelvin" class="tab-panel active">
+        <!-- Live Kelvin readout card -->
+        <div class="temperature-summary">
+          <div class="temp-readout">
+            <span class="temp-val" id="kelvin-display">5500</span>
+            <span class="temp-unit">K</span>
+            <span class="temp-name" id="kelvin-name">Direct Sunlight</span>
+          </div>
+          <div class="color-preview-chip" id="kelvin-chip" title="Current light emission preview"></div>
+        </div>
+
+        <!-- Kelvin Range Slider -->
+        <div class="control-group">
+          <div class="control-header">
+            <label for="kelvin-slider" class="control-label">Color Temperature</label>
+            <div class="stepper">
+              <button class="stepper-btn" id="kelvin-minus" title="Cooler / -100K">−</button>
+              <span class="stepper-val" id="kelvin-badge">5500K</span>
+              <button class="stepper-btn" id="kelvin-plus" title="Warmer / +100K">+</button>
+            </div>
+          </div>
+          <div class="slider-track-wrap kelvin-track-wrap">
+            <input type="range" id="kelvin-slider" min="2000" max="9500" step="50" value="5500" class="styled-range kelvin-range">
+          </div>
+          <div class="slider-scale">
+            <span>2000K (Candle)</span>
+            <span>4000K (Neutral)</span>
+            <span>6500K (Daylight)</span>
+            <span>9500K (Cold)</span>
+          </div>
+        </div>
+
+        <!-- Quick Kelvin Presets -->
+        <div class="presets-container">
+          <div class="presets-header">
+            <span class="presets-title">Presets & Atmospheres</span>
+          </div>
+          <div class="preset-pills" id="kelvin-presets">
+            <button class="preset-pill" data-kelvin="2000" data-name="Candlelight">
+              <span class="preset-dot" style="background-color: #ff8912;"></span>
+              <span class="preset-label">Candle</span>
+              <span class="preset-k">2000K</span>
+            </button>
+            <button class="preset-pill" data-kelvin="2700" data-name="Warm Incandescent">
+              <span class="preset-dot" style="background-color: #ffaa55;"></span>
+              <span class="preset-label">Warm / Sunset</span>
+              <span class="preset-k">2700K</span>
+            </button>
+            <button class="preset-pill" data-kelvin="3200" data-name="Studio Tungsten">
+              <span class="preset-dot" style="background-color: #ffc382;"></span>
+              <span class="preset-label">Tungsten</span>
+              <span class="preset-k">3200K</span>
+            </button>
+            <button class="preset-pill" data-kelvin="4000" data-name="Neutral Studio">
+              <span class="preset-dot" style="background-color: #ffe1be;"></span>
+              <span class="preset-label">Neutral</span>
+              <span class="preset-k">4000K</span>
+            </button>
+            <button class="preset-pill active" data-kelvin="5500" data-name="Direct Sunlight">
+              <span class="preset-dot" style="background-color: #fff4ea;"></span>
+              <span class="preset-label">Daylight</span>
+              <span class="preset-k">5500K</span>
+            </button>
+            <button class="preset-pill" data-kelvin="6500" data-name="Cool Broadcast">
+              <span class="preset-dot" style="background-color: #e5edff;"></span>
+              <span class="preset-label">Cool White</span>
+              <span class="preset-k">6500K</span>
+            </button>
+            <button class="preset-pill" data-kelvin="8000" data-name="Overcast Sky">
+              <span class="preset-dot" style="background-color: #c9dbff;"></span>
+              <span class="preset-label">Overcast</span>
+              <span class="preset-k">8000K</span>
+            </button>
+            <button class="preset-pill" data-kelvin="9500" data-name="Deep Cold Blue">
+              <span class="preset-dot" style="background-color: #aecdff;"></span>
+              <span class="preset-label">Arctic Cold</span>
+              <span class="preset-k">9500K</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: DUAL SPLIT LIGHT MODE -->
+      <section id="panel-split" class="tab-panel">
+        <p class="panel-subtitle">Simulate cinema 2-point lighting: Warm Key Light on one side + Cool Fill Light on the other.</p>
+        <div class="split-controls-grid">
+          <!-- Left Light -->
+          <div class="sub-panel">
+            <div class="sub-panel-title">
+              <span>Left Side Light</span>
+              <span id="split-left-val" class="stepper-val">3200K</span>
+            </div>
+            <input type="range" id="split-left-slider" min="2000" max="9500" step="100" value="3200" class="styled-range">
+            <div class="sub-slider-row">
+              <label>Brightness</label>
+              <input type="range" id="split-left-bright" min="10" max="100" step="5" value="100" class="styled-range compact">
+            </div>
+          </div>
+
+          <!-- Right Light -->
+          <div class="sub-panel">
+            <div class="sub-panel-title">
+              <span>Right Side Light</span>
+              <span id="split-right-val" class="stepper-val">6500K</span>
+            </div>
+            <input type="range" id="split-right-slider" min="2000" max="9500" step="100" value="6500" class="styled-range">
+            <div class="sub-slider-row">
+              <label>Brightness</label>
+              <input type="range" id="split-right-bright" min="10" max="100" step="5" value="80" class="styled-range compact">
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group mt-12">
+          <div class="control-header">
+            <label for="split-angle-slider" class="control-label">Blend Angle / Direction</label>
+            <span id="split-angle-val" class="stepper-val">90° (Left / Right)</span>
+          </div>
+          <input type="range" id="split-angle-slider" min="0" max="360" step="15" value="90" class="styled-range">
+        </div>
+      </section>
+
+      <!-- TAB 3: RING LIGHT MODE -->
+      <section id="panel-ring" class="tab-panel">
+        <p class="panel-subtitle">Dark central cutout prevents glare directly in your eyes while casting smooth catchlight circles on pupils.</p>
+        <div class="control-group">
+          <div class="control-header">
+            <label for="ring-size-slider" class="control-label">Center Dark Cutout Diameter</label>
+            <span id="ring-size-val" class="stepper-val">40%</span>
+          </div>
+          <input type="range" id="ring-size-slider" min="15" max="75" step="1" value="40" class="styled-range">
+        </div>
+        <div class="control-group">
+          <div class="control-header">
+            <label for="ring-softness-slider" class="control-label">Edge Softness / Falloff</label>
+            <span id="ring-softness-val" class="stepper-val">15%</span>
+          </div>
+          <input type="range" id="ring-softness-slider" min="0" max="40" step="1" value="15" class="styled-range">
+        </div>
+      </section>
+
+      <!-- TAB 4: RGB MOOD MODE -->
+      <section id="panel-rgb" class="tab-panel">
+        <p class="panel-subtitle">Custom RGB colors, stream accent lights, and colored video backdrops.</p>
+        <div class="rgb-picker-row">
+          <div class="rgb-color-preview" id="rgb-preview-box"></div>
+          <div class="rgb-sliders-col">
+            <div class="control-group">
+              <div class="control-header">
+                <label for="rgb-hue-slider" class="control-label">Hue Spectrum</label>
+                <span id="rgb-hue-val" class="stepper-val">280°</span>
+              </div>
+              <input type="range" id="rgb-hue-slider" min="0" max="360" step="1" value="280" class="styled-range hue-range">
+            </div>
+            <div class="control-group">
+              <div class="control-header">
+                <label for="rgb-sat-slider" class="control-label">Saturation</label>
+                <span id="rgb-sat-val" class="stepper-val">85%</span>
+              </div>
+              <input type="range" id="rgb-sat-slider" min="10" max="100" step="1" value="85" class="styled-range">
+            </div>
+          </div>
+        </div>
+
+        <div class="rgb-presets-row">
+          <button class="rgb-preset-btn" data-hue="330" data-sat="100" style="--c: #ff1493;">Cyber Pink</button>
+          <button class="rgb-preset-btn" data-hue="280" data-sat="90" style="--c: #9d00ff;">Neon Violet</button>
+          <button class="rgb-preset-btn" data-hue="185" data-sat="95" style="--c: #00e5ff;">Cyan Stream</button>
+          <button class="rgb-preset-btn" data-hue="145" data-sat="80" style="--c: #00e676;">Matrix Green</button>
+          <button class="rgb-preset-btn" data-hue="35" data-sat="100" style="--c: #ff9100;">Golden Sunset</button>
+          <button class="rgb-preset-btn" data-hue="0" data-sat="90" style="--c: #ff1744;">Deep Red</button>
+        </div>
+      </section>
+
+      <!-- SHARED FOOTER CONTROLS: BRIGHTNESS & TINT -->
+      <footer class="hud-footer">
+        <div class="footer-control-grid">
+          <!-- Brightness -->
+          <div class="footer-slider-card">
+            <div class="control-header">
+              <div class="flex-label">
+                <button id="mute-light-btn" class="mini-icon-btn" title="Toggle Light On/Off (Space)">
+                  <svg id="bulb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18h6m-4 4h2M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"/>
+                  </svg>
+                </button>
+                <label for="brightness-slider">Master Brightness</label>
+              </div>
+              <span id="brightness-badge" class="stepper-val">100%</span>
+            </div>
+            <input type="range" id="brightness-slider" min="5" max="100" step="1" value="100" class="styled-range brightness-range">
+          </div>
+
+          <!-- Tint (Green/Magenta Shift) -->
+          <div class="footer-slider-card">
+            <div class="control-header">
+              <div class="flex-label">
+                <span class="tint-icon">🎨</span>
+                <label for="tint-slider">Tint Balance (Magenta / Green)</label>
+              </div>
+              <span id="tint-badge" class="stepper-val">Neutral (0)</span>
+            </div>
+            <input type="range" id="tint-slider" min="-50" max="50" step="1" value="0" class="styled-range tint-range">
+          </div>
+        </div>
+
+        <div class="footer-status-row">
+          <div class="hud-autohide-tip">
+            <span class="mouse-icon">🖱️</span>
+            <span>Controls auto-hide after 3s. Move mouse or press <strong>H</strong> to toggle.</span>
+          </div>
+          <div class="quick-shortcuts-hint">
+            <span><strong>F</strong> Fullscreen</span>
+            <span class="sep">•</span>
+            <span><strong>Space</strong> Toggle Light</span>
+            <span class="sep">•</span>
+            <span><strong>↑/↓</strong> Brightness</span>
+            <span class="sep">•</span>
+            <span><strong>←/→</strong> Warm/Cool</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- FLOATING DRAGGABLE WEBCAM MIRROR PREVIEW -->
+  <aside id="camera-preview-container" class="camera-preview-card hidden">
+    <div class="camera-card-header" id="camera-drag-handle">
+      <div class="camera-title">
+        <span class="cam-recording-dot"></span>
+        <span>Lighting Camera Mirror</span>
+      </div>
+      <div class="camera-header-tools">
+        <button id="cam-flip-btn" class="cam-mini-btn" title="Flip Mirror Image">↔</button>
+        <button id="cam-close-btn" class="cam-mini-btn" title="Close Preview (C)">✕</button>
+      </div>
+    </div>
+    <div class="camera-video-wrapper">
+      <video id="webcam-video" autoplay playsinline muted></video>
+      <div id="camera-placeholder" class="camera-placeholder">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M23 7l-7 5 7 5V7z"/>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+        </svg>
+        <p>Connecting camera mirror...</p>
+      </div>
+    </div>
+    <div class="camera-card-footer">
+      <span>100% Local Preview &bull; Private & Secure</span>
+    </div>
+  </aside>
+
+  <!-- KEYBOARD SHORTCUTS MODAL -->
+  <dialog id="shortcuts-dialog" class="shortcuts-dialog">
+    <div class="dialog-card">
+      <div class="dialog-header">
+        <h3>Keyboard Shortcuts</h3>
+        <button id="shortcuts-close-btn" class="cam-mini-btn" aria-label="Close">✕</button>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <kbd>Space</kbd>
+          <span>Turn light ON / OFF (Blackout)</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>F</kbd>
+          <span>Toggle Fullscreen</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>H</kbd>
+          <span>Pin / Toggle HUD controls visibility</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>C</kbd>
+          <span>Toggle Webcam Mirror preview</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>→</kbd> / <kbd>←</kbd>
+          <span>Color Temperature +200K / -200K</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>↑</kbd> / <kbd>↓</kbd>
+          <span>Brightness +5% / -5%</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>1</kbd> - <kbd>4</kbd>
+          <span>Switch light modes (Kelvin, Split, Ring, RGB)</span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>Esc</kbd>
+          <span>Exit Fullscreen</span>
+        </div>
+      </div>
+      <button id="shortcuts-confirm-btn" class="primary-btn mt-16">Got it</button>
+    </div>
+  </dialog>
+
+  <!-- SCRIPTS -->
+  <script src="app.js"></script>
+</body>
+</html>
