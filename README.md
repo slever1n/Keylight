@@ -1,33 +1,31 @@
-# Lumina Keylight � Professional Studio & Webcam Lighting ??
+# Lumina Keylight — Professional Studio & Webcam Lighting 💡
 
 Turn your computer monitor into an ultra-bright, flicker-free studio keylight for video calls, streaming, content creation, and photography.
 
-Located at: `E:\Devin\keylight`
-
 ---
 
-## ? Quick Launch (.EXE)
+## 🚀 Quick Launch (.EXE)
 
-A standalone Windows executable is built and ready in this folder:
+Download the standalone Windows executable from the [**latest release**](https://github.com/slever1n/Keylight/releases/latest):
 - **`Keylight.exe`**
 - Simply double-click **`Keylight.exe`** to launch! No browser or command line required.
 
 ---
 
-## ?? Features
+## ✨ Features
 
 ### 1. Color Temperature Spectrum (Kelvin Scale)
 - **Continuous Range**: Smooth slider from **2000K (Deep Warm Amber / Candlelight)** up to **9500K (Arctic Cold Daylight)**.
 - **Accurate Blackbody Physics**: Converts Planckian locus color temperatures to sRGB for true studio-grade illumination.
 - **Quick-Tap Presets**:
-  - ??? **2000K** � Candlelight & Fireplace
-  - ?? **2700K** � Warm Incandescent / Golden Hour
-  - ?? **3200K** � Studio Tungsten / Halogen
-  - ?? **4000K** � Neutral White
-  - ?? **5500K** � Direct Noon Sunlight
-  - ?? **6500K** � Cool Broadcast Daylight
-  - ??? **8000K** � Overcast Sky
-  - ?? **9500K** � Deep Arctic Cold Blue
+  - 🕯️ **2000K** — Candlelight & Fireplace
+  - 🌅 **2700K** — Warm Incandescent / Golden Hour
+  - 💡 **3200K** — Studio Tungsten / Halogen
+  - ⚪ **4000K** — Neutral White
+  - ☀️ **5500K** — Direct Noon Sunlight
+  - 📺 **6500K** — Cool Broadcast Daylight
+  - ☁️ **8000K** — Overcast Sky
+  - 🧊 **9500K** — Deep Arctic Cold Blue
 
 ### 2. Multi-Mode Lighting Engine
 - **Key Light (Full Flood)**: Maximum surface area monitor emission for uniform, flattering lighting without harsh shadows.
@@ -44,7 +42,7 @@ A standalone Windows executable is built and ready in this folder:
 
 ---
 
-## ?? Keyboard Shortcuts
+## ⌨️ Keyboard Shortcuts
 
 | Shortcut | Action |
 | :--- | :--- |
@@ -52,16 +50,16 @@ A standalone Windows executable is built and ready in this folder:
 | `F` | Toggle Fullscreen |
 | `H` | Pin / Auto-hide Control HUD |
 | `C` | Toggle Webcam Mirror Preview |
-| `?` / `?` | Color Temperature +200K / -200K |
-| `?` / `?` | Brightness +5% / -5% |
-| `1` � `4` | Switch Light Mode (Kelvin, Split, Ring, RGB) |
+| `→` / `←` | Color Temperature +200K / -200K |
+| `↑` / `↓` | Brightness +5% / -5% |
+| `1` – `4` | Switch Light Mode (Kelvin, Split, Ring, RGB) |
 | `?` | Show Shortcuts Cheatsheet |
 | `Esc` | Exit Fullscreen |
 
 ---
 
-## ?? Ways to Run
+## 🛠️ Ways to Run
 
-1. **Standalone App**: Double-click [Keylight.exe](file:///E:/Devin/keylight/Keylight.exe).
-2. **Direct in Browser**: Double-click [index.html](file:///E:/Devin/keylight/index.html).
+1. **Standalone App**: Download and double-click `Keylight.exe` from the [Releases page](https://github.com/slever1n/Keylight/releases/latest).
+2. **Direct in Browser**: Open [`index.html`](index.html) in any modern browser.
 3. **Local HTTP Server**: Run `python -m http.server 4321` and visit `http://localhost:4321`.
