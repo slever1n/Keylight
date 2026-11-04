@@ -63,3 +63,7 @@ Download the standalone Windows executable from the [**latest release**](https:/
 1. **Standalone App**: Download and double-click `Keylight.exe` from the [Releases page](https://github.com/slever1n/Keylight/releases/latest).
 2. **Direct in Browser**: Open [`index.html`](index.html) in any modern browser.
 3. **Local HTTP Server**: Run `python -m http.server 4321` and visit `http://localhost:4321`.
+
+## ☕ Buy me a coffee
+
+https://buymeacoffee.com/sleverin
